@@ -1,21 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h3 class="center-align">Register</h3>
+<h3 class="center-align">Log In</h3>
 
 <div class="row">
-    <!-- m8 class makes the card span 8 spaces wide (on 12 space grid) with offset-m2  -->
-    <!-- Form method is Post and the action is the register() function in Python using url_for -->
-    <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('register') }}">
+    <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('login') }}">
         <div class="card-panel">
             <!-- Username field -->
             <div class="row">
                 <div class="input-field col s12">
-                    <i class="fa-solid fa-user-plus prefix light-blue-text text-darken-4"></i>
-                    <!-- pattern property allows use of Regular Expressions (RegEx) -->
-                    <!-- ^ tells pattern it's the start of a string, $ tells it it's the end of a string -->
-                    <!-- Within [ ], specify what users can use in the field -->
-                    <!-- Within { }, specify range of the number of characters that can be used, separated by commas -->
+                    <i class="fa-solid fa-user-cog prefix light-blue-text text-darken-4"></i>
                     <input id="username" name="username" type="text" minlength="5" maxlength="15" class="validate" pattern="^[a-zA-Z0-9]{5,15}$" required>
                     <label for="username">Username</label>
                 </div>
@@ -28,11 +22,11 @@
                     <label for="password">Password</label>
                 </div>
             </div>
-            <!-- Register button -->
+            <!-- Log In button -->
             <div class="row">
                 <!-- Generate large button that spans entire 12 space width of the parent card element -->
                 <button type="submit" class="col s12 btn-large light-blue darken-4 text-shadow">
-                    Register <i class="fa-solid fa-sign-in-alt"></i>
+                    Log In <i class="fa-solid fa-sign-in-alt"></i>
                 </button>
             </div>
         </div>
@@ -42,10 +36,10 @@
 <div class="row">
     <div class="col s12">
         <p class="center-align">
-            Already registered?
-            <a href="{{ url_for('login') }}" class="light-blue-text text-darken-4">Log In</a>
+            New here?
+            <a href="{{ url_for('register') }}" class="light-blue-text text-darken-4">Register Account</a>
         </p>
     </div>
-</div
+</div>
 
 {% endblock %}

@@ -62,6 +62,37 @@ def register():
     return render_template("register.html")
 
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        #Check if username exists in database
+        existing_user = mongo.db.users.find_one(
+            {"username": request.form.get("username").lower()})
+
+        if existing_user:
+            #Ensures the hashed password matches user's inputted password
+            #check_password_hash takes two arguments
+            #The first is the key field (password in this case) wrapped in [ ] as it's part of existing_user variable
+            #The second is the password the user supplied on the login form, requested the form element with the name of "password"
+            if check_password_hash(existing_user["password"], request.form.get("password")):
+                #Creates cookie for user which is set the the provided username in lowercase
+                session["user"] = request.form.get("username").lower()
+                #Displays welcome message. {} is a placeholder. format is the requested form element for "username"
+                flash("Welcome, {}".format(request.form.get("username")))
+            
+            else:
+                #Invalid password match, displays vague message to dissuade brute forcing
+                flash("Incorrect Username and/or Password")
+                return redirect(url_for("login"))
+            
+        else:
+            #username doesn't exist
+            flash("Incorrect Username and/or Password")
+            return redirect(url_for("login"))
+
+    return render_template("login.html")
+
+
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
             port=int(os.environ.get("PORT")),
