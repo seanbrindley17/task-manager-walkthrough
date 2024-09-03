@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3 class="center-align">Register</h3>
+
+<div class="row">
+    <!-- m8 class makes the card span 8 spaces wide (on 12 space grid) with offset-m2  -->
+    <!-- Form method is Post and the action is the register() function in Python using url_for -->
+    <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('register') }}">
+        <div class="card-panel">
+            <!-- Username field -->
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="fa-solid fa-user-plus prefix light-blue-text text-darken-4"></i>
+                    <input id="username" name="username" type="text" class="validate">
+                    <label for="username">First Name</label>
+                </div>
+            </div>
+            <!-- Password field -->
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="fa-solid fa-user-lock prefix light-blue-text text-darken-4"></i>
+                    <input id="password" name="password" type="password" class="validate">
+                    <label for="password">Password</label>
+                </div>
+            </div>
+            <!-- Register button -->
+            <div class="row">
+                <!-- Generate large button that spans entire 12 space width of the parent card element -->
+                <button type="submit" class="col s12 btn-large light-blue darken-4 text-shadow">
+                    Register <i class="fa-solid fa-sign-in-alt"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
