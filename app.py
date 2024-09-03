@@ -102,9 +102,21 @@ def profile(username):
     #The [] at the end with "username" in specifies to only retrieve the username stored, not the password
     username = mongo.db.users.find_one({"username": session["user"]})["username"]
     
-    #returns the profile of the user. the first argument is what is expected to return
-    #the second argument is the username variable defined above
-    return render_template("profile.html", username=username)
+    #returns the appropriate profile of the user using the cookie if it's truthy.
+    if session["user"]:
+        #the first argument is what is expected to return
+        #the second argument is the username variable defined above
+        return render_template("profile.html", username=username)
+    #if the cookie is false or doesn't exist, redirect to login
+    return redirect(url_for("login"))
+
+#Don't need to supply method, as GET is default and POST won't be used for this function
+@app.route("/logout")
+def logout():
+    flash("You've been logged out")
+    #Removes specified session cookie. Can use session.clear() to remove all applicable session cookies too
+    session.pop("user")
+    return redirect(url_for("login"))
 
 
 if __name__ == "__main__":
