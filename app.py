@@ -59,6 +59,8 @@ def register():
         session["user"] = request.form.get("username").lower()
         #After username is placed into session, flash() message to user
         flash("Registration successful")
+        #Redirects user to the profile page, which is looking for variable "username" so set that to same session cookie of "user"
+        return redirect(url_for("profile", username=session["user"]))
     return render_template("register.html")
 
 
@@ -79,6 +81,7 @@ def login():
                 session["user"] = request.form.get("username").lower()
                 #Displays welcome message. {} is a placeholder. format is the requested form element for "username"
                 flash("Welcome, {}".format(request.form.get("username")))
+                return redirect(url_for("profile", username=session["user"]))
             
             else:
                 #Invalid password match, displays vague message to dissuade brute forcing
@@ -91,6 +94,17 @@ def login():
             return redirect(url_for("login"))
 
     return render_template("login.html")
+
+#Passing username variable in the app.route()
+@app.route("/profile/<username>", methods=["GET", "POST"])
+def profile(username):
+    #Finds the username from the database using the session variable cookie and stores it in "username"
+    #The [] at the end with "username" in specifies to only retrieve the username stored, not the password
+    username = mongo.db.users.find_one({"username": session["user"]})["username"]
+    
+    #returns the profile of the user. the first argument is what is expected to return
+    #the second argument is the username variable defined above
+    return render_template("profile.html", username=username)
 
 
 if __name__ == "__main__":
