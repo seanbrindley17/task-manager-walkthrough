@@ -122,7 +122,10 @@ def logout():
 
 @app.route("/add_task")
 def add_task():
-    return render_template("add_task.html")
+    #Performs find() method on categories collection and sorts them alphabetically using '1' as the second argument in sort() method
+    categories = mongo.db.categories.find().sort("category_name", 1)
+    #Passes categories to the add_task template
+    return render_template("add_task.html", categories=categories)
 
 
 if __name__ == "__main__":
