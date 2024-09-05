@@ -147,6 +147,17 @@ def add_task():
     return render_template("add_task.html", categories=categories)
 
 
+@app.route("/edit_task/<task_id>", methods=["GET", "POST"])
+def edit_task(task_id):
+    #Uses the database unique object id to retrieve the correct task
+    #Need to import ObjectID from bson.objectid to be able to render MongoDB elements by unique ID
+    task = mongo.db.tasks.find_one({"_id": ObjectId(task_id)})
+    #Performs find() method on categories collection and sorts them alphabetically using '1' as the second argument in sort() method
+    categories = mongo.db.categories.find().sort("category_name", 1)
+    #Passes task variable from above and categories to the edit_task template
+    return render_template("edit_task.html", task=task, categories=categories)
+
+
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
             port=int(os.environ.get("PORT")),
