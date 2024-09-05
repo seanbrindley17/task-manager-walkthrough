@@ -149,12 +149,31 @@ def add_task():
 
 @app.route("/edit_task/<task_id>", methods=["GET", "POST"])
 def edit_task(task_id):
+    #If the HTTP method being requested is POST
+    if request.method == "POST":
+        #Sets the is_urgent to on if the requested form element button is checked to on, otherwise it's off
+        is_urgent = "on" if request.form.get("is_urgent") else "off"
+        submit = {
+            "category_name": request.form.get("category_name"),
+            "task_name": request.form.get("task_name"),
+            "task_description": request.form.get("task_description"),
+            "is_urgent": is_urgent,
+            "due_date": request.form.get("due_date"),
+            #created_by uses session cookie to get the username of the person adding the task and insert it into the dictionary
+            "created_by": session["user"]
+        }
+        #Uses update_one(), takes two arguments which are both dictionaries.
+        #First argument specifies the task being updated using the ObjectID from the database
+        #Second is the dictionary from the submit variable above
+        mongo.db.tasks.update_one({"_id": ObjectId(task_id)}, submit)
+        flash("Task Successfully Updated")
+    
     #Uses the database unique object id to retrieve the correct task
     #Need to import ObjectID from bson.objectid to be able to render MongoDB elements by unique ID
     task = mongo.db.tasks.find_one({"_id": ObjectId(task_id)})
     #Performs find() method on categories collection and sorts them alphabetically using '1' as the second argument in sort() method
     categories = mongo.db.categories.find().sort("category_name", 1)
-    #Passes task variable from above and categories to the edit_task template
+    #Passes task variable from above and categories to the edit_task template and returns user to the same edit page
     return render_template("edit_task.html", task=task, categories=categories)
 
 
