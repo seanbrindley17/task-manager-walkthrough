@@ -184,6 +184,14 @@ def delete_task(task_id):
     return render_template(url_for("get_tasks"))
 
 
+@app.route("/get_categories")
+def get_categories():
+    #Stores the data in a proper list and will sort by category name alphabetically
+    categories = list(mongo.db.categories.find().sort("category_name", 1))
+    #The first 'categories' is what is passed into the template, the second is the variable returned above
+    return render_template("categories.html", categories=categories)
+
+
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
             port=int(os.environ.get("PORT")),
