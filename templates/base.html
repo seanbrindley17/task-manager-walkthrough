@@ -31,6 +31,7 @@
                         <li><a href="{{ url_for('profile', username=session['user']) }}">Profile</a></li>
                         <li><a href="{{ url_for('add_task') }}">New Task</a></li>
                          <!-- Will display only if logged in as admin. Uses |lower which is jinja lowercase filter -->
+                         <!-- There are better, more secure ways to do admin privileges -->
                         {% if session.user|lower == "admin"|lower %}
                             <li><a href="{{ url_for('get_categories') }}">Manage Categories</a></li>
                         {% endif %}
