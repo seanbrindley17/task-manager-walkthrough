@@ -212,6 +212,7 @@ def edit_category(category_id):
         submit = {
             "category_name": request.form.get("category_name")
         }
+        #Uses $set operator to tell MongoDB to update the field within 'submit' only, instead of replacing entire document
         mongo.db.categories.update_one({"_id": ObjectId(category_id)}, {"$set": submit})
         flash("Category Successfully Updated")
         return redirect(url_for("get_categories"))
@@ -219,6 +220,12 @@ def edit_category(category_id):
     category = mongo.db.categories.find_one({"_id": ObjectId(category_id)})
     return render_template("edit_category.html", category=category)
 
+
+@app.route("/delete_category/<category_id>")
+def delete_category(category_id):
+    mongo.db.categories.delete_one({"_id": ObjectId(category_id)})
+    flash ("Category Successfully Deleted")
+    return redirect(url_for("get_categories"))
 
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
